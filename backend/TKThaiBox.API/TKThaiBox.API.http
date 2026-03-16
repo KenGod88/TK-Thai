@@ -1,0 +1,6 @@
+@TKThaiBox.API_HostAddress = http://localhost:5232
+
+GET {{TKThaiBox.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
