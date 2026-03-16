@@ -22,6 +22,7 @@ pnpm-debug.log*
 bin/
 obj/
 appsettings.Local.json
+docker-compose.override.yml
 
 # user files
 *.user
