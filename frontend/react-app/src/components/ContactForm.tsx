@@ -33,41 +33,49 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <section className="bg-zinc-950 py-10 px-6">
 
-      <input
-        name="name"
-        placeholder="Naam"
-        value={form.name}
-        onChange={handleChange}
-        required
-        className="w-full bg-zinc-900 border border-zinc-800 p-3"
-      />
+    <div className="max-w-xl mx-auto">
 
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={handleChange}
-        required
-        className="w-full bg-zinc-900 border border-zinc-800 p-3"
-      />
+      <form onSubmit={handleSubmit} className="space-y-6">
 
-      <textarea
-        name="message"
-        placeholder="Bericht"
-        value={form.message}
-        onChange={handleChange}
-        required
-        className="w-full bg-zinc-900 border border-zinc-800 p-3"
-      />
+        <input
+          name="name"
+          placeholder="Naam"
+          value={form.name}
+          onChange={handleChange}
+          required
+          className="w-full bg-zinc-900 border border-zinc-800 p-3 rounded-md"
+        />
 
-      <button className="bg-orange-500 px-6 py-3">
-        Verstuur
-      </button>
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+          className="w-full bg-zinc-900 border border-zinc-800 p-3 rounded-md"
+        />
 
-    </form>
+        <textarea
+          name="message"
+          placeholder="Bericht"
+          value={form.message}
+          onChange={handleChange}
+          required
+          className="w-full bg-zinc-900 border border-zinc-800 p-3 rounded-md"
+        />
+
+        <button className="bg-orange-500 px-6 py-3 rounded-md w-full hover:bg-orange-600 transition">
+          Verstuur
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
   );
 };
 

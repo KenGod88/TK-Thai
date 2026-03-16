@@ -7,6 +7,7 @@ import Membership from "../components/Membership";
 import NewsPreview from "../components/NewsPreview";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
+// import ContactForm from "../components/ContactForm";
 
 const Home: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const Home: React.FC = () => {
       <Membership />
       <NewsPreview />
       <ContactSection />
+      {/* <ContactForm /> */}
       <Footer />
     </>
   );

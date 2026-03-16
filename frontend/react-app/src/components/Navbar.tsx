@@ -25,11 +25,12 @@ const Navbar: React.FC = () => {
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-12 text-sm uppercase tracking-widest text-white">
 
-          <NavItem label="Home" />
-          <NavItem label="Training" />
-          <NavItem label="Schedule" />
-          <NavItem label="Coach" />
-          <NavItem label="Contact" />
+          <NavItem label="Home" href="#home" />
+          <NavItem label="Training" href="#training" />
+          <NavItem label="Schedule" href="#schedule" />
+          <NavItem label="Coach" href="#coaches" />
+          <NavItem label="Gallery" href="#gallery" />
+          <NavItem label="Contact" href="#contact" />
 
         </div>
 
@@ -56,11 +57,12 @@ const Navbar: React.FC = () => {
       >
         <div className="flex flex-col gap-8 text-white text-lg p-8 pt-20">
 
-          <a href="#">Home</a>
-          <a href="#">Training</a>
-          <a href="#">Schedule</a>
-          <a href="#">Coach</a>
-          <a href="#">Contact</a>
+            <NavItem label="Home" href="#home" onClick={() => setOpen(false)} />
+            <NavItem label="Training" href="#training" onClick={() => setOpen(false)} />
+            <NavItem label="Schedule" href="#schedule" onClick={() => setOpen(false)} />
+            <NavItem label="Gallery" href="#gallery" onClick={() => setOpen(false)} />
+            <NavItem label="Coach" href="#coaches" onClick={() => setOpen(false)} />
+            <NavItem label="Contact" href="#contact" onClick={() => setOpen(false)} />
 
           <button className="bg-orange-500 px-6 py-2 rounded-md">
             Proefles
@@ -76,9 +78,21 @@ export default Navbar;
 
 /* Nav item with animated underline */
 
-const NavItem = ({ label }: { label: string }) => {
+const NavItem = ({
+  label,
+  href,
+  onClick
+}: {
+  label: string;
+  href: string;
+  onClick?: () => void;
+}) => {
   return (
-    <a className="relative cursor-pointer group">
+    <a
+      href={href}
+      onClick={onClick}
+      className="relative cursor-pointer group"
+    >
       {label}
 
       <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-orange-500 transition-all duration-300 group-hover:w-full"></span>

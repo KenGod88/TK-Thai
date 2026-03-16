@@ -10,7 +10,7 @@ const coaches = [
 
 const Coaches: React.FC = () => {
   return (
-    <section className="bg-zinc-950 text-white  px-6">
+    <section id="coaches" className="bg-zinc-950 text-white  px-6">
 
       <div className="max-w-6xl mx-auto">
 

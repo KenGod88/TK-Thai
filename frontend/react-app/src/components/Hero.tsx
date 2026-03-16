@@ -2,7 +2,7 @@ import logo from "../assets/TKlogo.svg";
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative h-screen bg-black flex items-center justify-center overflow-hidden text-white pt-24">
+    <section id="home" className="relative h-screen bg-black flex items-center justify-center overflow-hidden text-white pt-24">
 
       {/* spotlight */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_0%,rgba(255,115,0,0.35)_25%,transparent_65%)]" />

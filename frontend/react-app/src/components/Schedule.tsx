@@ -6,7 +6,7 @@ const schedule = [
 
 const Schedule: React.FC = () => {
   return (
-    <section className="bg-zinc-950 text-white py-24 px-6">
+    <section id="schedule" className="bg-zinc-950 text-white py-24 px-6">
 
       <div className="max-w-5xl mx-auto">
 

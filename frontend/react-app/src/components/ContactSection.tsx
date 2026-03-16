@@ -1,6 +1,8 @@
+import ContactForm from "./ContactForm";
+
 const ContactSection: React.FC = () => {
   return (
-    <section className="bg-zinc-950 text-white py-24 px-6">
+    <section id="contact" className="bg-zinc-950 text-white py-24 px-6">
 
       <div className="max-w-5xl mx-auto text-center">
 
@@ -18,6 +20,8 @@ const ContactSection: React.FC = () => {
           <p>✉ timkastouri@gmail.com</p>
 
         </div>
+
+        <ContactForm />
 
       </div>
 
