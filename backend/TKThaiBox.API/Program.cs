@@ -10,6 +10,9 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<EmailService>();
+
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -23,6 +26,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 var app = builder.Build();
+
+//CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("frontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+app.UseCors("frontend");
+
 
 // 👉 Database migrations automatisch uitvoeren
 using (var scope = app.Services.CreateScope())
