@@ -1,8 +1,10 @@
 public interface IMemberService
 {
-    Task<IEnumerable<Member>> GetAllMembersAsync();
-    Task<Member?> GetMemberByIdAsync(int id);
-    Task AddMemberAsync(Member member);
-    Task UpdateMemberAsync(Member member);
+    Task<IEnumerable<MemberDTO>> GetAllMembersAsync();
+    Task<MemberDTO?> GetMemberByIdAsync(int id);
+    Task AddMemberAsync(CreateMemberDTO dto);
+    Task UpdateMemberAsync(int id, CreateMemberDTO dto);
     Task DeleteMemberAsync(int id);
+    Task<MemberDashboardDTO?> GetMemberDashboardAsync(int id);
+    Task<IEnumerable<AdminPaymentStatusDTO>> GetPaymentStatusAsync();
 }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,67 +11,72 @@ public class MemberController : ControllerBase
         _memberService = memberService;
     }
 
+    // GET: api/member
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Member>>> GetAllMembers()
+    public async Task<ActionResult<IEnumerable<MemberDTO>>> GetMembers()
     {
         var members = await _memberService.GetAllMembersAsync();
         return Ok(members);
     }
 
+    // GET: api/member/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Member>> GetMemberById(int id)
+    public async Task<ActionResult<MemberDTO>> GetMember(int id)
     {
         var member = await _memberService.GetMemberByIdAsync(id);
+
         if (member == null)
-        {
             return NotFound();
-        }
+
         return Ok(member);
     }
 
+    // POST: api/member
     [HttpPost]
-    public async Task<ActionResult> AddMember(Member member)
+    public async Task<IActionResult> CreateMember(CreateMemberDTO dto)
     {
-        await _memberService.AddMemberAsync(member);
-        return CreatedAtAction(nameof(GetMemberById), new { id = member.Id }, member);
+        await _memberService.AddMemberAsync(dto);
+        return Created("", null);
     }
 
+    // PUT: api/member/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateMember(int id, Member member)
+    public async Task<IActionResult> UpdateMember(int id, CreateMemberDTO dto)
     {
-        if (id != member.Id)
-        {
-            return BadRequest();
-        }
-
         try
         {
-            await _memberService.UpdateMemberAsync(member);
+            await _memberService.UpdateMemberAsync(id, dto);
             return NoContent();
         }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (await _memberService.GetMemberByIdAsync(id) == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteMember(int id)
-    {
-        var existingMember = await _memberService.GetMemberByIdAsync(id);
-        if (existingMember == null)
+        catch (Exception)
         {
             return NotFound();
         }
+    }
 
+    // DELETE: api/member/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMember(int id)
+    {
         await _memberService.DeleteMemberAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("{id}/dashboard")]
+    public async Task<ActionResult<MemberDashboardDTO>> GetDashboard(int id)
+    {
+        var dashboard = await _memberService.GetMemberDashboardAsync(id);
+
+        if (dashboard == null)
+            return NotFound();
+
+        return Ok(dashboard);
+    }
+
+    [HttpGet("/api/admin/payment-status")]
+    public async Task<ActionResult<IEnumerable<AdminPaymentStatusDTO>>> GetPaymentStatus()
+    {
+        var result = await _memberService.GetPaymentStatusAsync();
+        return Ok(result);
     }
 }
