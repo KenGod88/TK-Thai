@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
+import Layout from "./components/Layout";
 
 import Home from "./pages/Home";
 import News from "./pages/News";
@@ -14,16 +14,20 @@ function App() {
   return (
     <BrowserRouter>
 
-      <Navbar />
-
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/training" element={<Training />} />
-        <Route path="/club" element={<Club />} />
-        <Route path="/photos" element={<Photos />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
+
+        <Route element={<Layout />}>
+
+          <Route path="/" element={<Home />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/training" element={<Training />} />
+          <Route path="/club" element={<Club />} />
+          <Route path="/photos" element={<Photos />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+
+        </Route>
+
       </Routes>
 
     </BrowserRouter>
