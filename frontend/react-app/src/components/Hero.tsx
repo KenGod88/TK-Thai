@@ -2,20 +2,20 @@ import logo from "../assets/TKlogo.svg";
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative h-screen bg-black flex items-center justify-center overflow-hidden text-white">
+    <section className="relative h-screen bg-black flex items-center justify-center overflow-hidden text-white pt-24">
 
-      {/* spotlight background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,80,0,0.18),transparent_60%)]" />
+      {/* spotlight */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_0%,rgba(255,115,0,0.35)_25%,transparent_65%)]" />
 
-      {/* subtle grain overlay */}
+      {/* smoke texture */}
       <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
       <div className="relative z-10 text-center px-6 max-w-3xl">
 
         <img
           src={logo}
-          alt="TK Gym Logo"
-          className="mx-auto mb-10 w-[420px] max-w-[85%] drop-shadow-2xl"
+          alt="TK Gym"
+          className="mx-auto mb-10 w-[420px] max-w-[85%] drop-shadow-[0_0_30px_rgba(255,80,0,0.5)]"
         />
 
         <h1 className="text-xl md:text-2xl tracking-[0.35em] font-semibold mb-6">
@@ -24,7 +24,6 @@ const Hero: React.FC = () => {
 
         <p className="text-gray-300 text-lg mb-10 max-w-xl mx-auto">
           Train techniek, kracht en discipline bij T.K. Gym.
-          Word sterker, sneller en zelfverzekerder.
         </p>
 
         <div className="flex justify-center gap-5 flex-wrap">
@@ -39,12 +38,6 @@ const Hero: React.FC = () => {
 
         </div>
 
-      </div>
-
-      {/* scroll indicator */}
-      <div className="absolute bottom-10 flex flex-col items-center text-gray-400 animate-bounce">
-        <div className="w-[2px] h-8 bg-gray-400 mb-2"></div>
-        <span className="text-xs tracking-widest">SCROLL</span>
       </div>
 
     </section>
