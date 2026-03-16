@@ -1,27 +1,27 @@
 import Hero from "../components/Hero";
+import Schedule from "../components/Schedule";
+import TrainingTypes from "../components/Trainings";
+import Coaches from "../components/Coaches";
+import Gallery from "../components/Gallery";
+import Membership from "../components/Membership";
+import NewsPreview from "../components/NewsPreview";
+import ContactSection from "../components/ContactSection";
+import Footer from "../components/Footer";
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
-    <div>
-
+    <>
       <Hero />
-
-      <section style={{ padding: "40px" }}>
-        <h2>Laatste nieuws</h2>
-
-        <p>🥊 Nieuwe jeugdtraining gestart</p>
-        <p>🏆 Wedstrijd overwinning afgelopen weekend</p>
-        <p>🔥 Club BBQ binnenkort</p>
-      </section>
-
-      <section style={{ padding: "40px" }}>
-        <h2>Training schema</h2>
-
-        <p>Maandag — 19:00 jeugd / 20:30 volwassenen</p>
-        <p>Woensdag — 19:00 jeugd / 20:30 volwassenen</p>
-        <p>Vrijdag — 20:00 sparring</p>
-      </section>
-
-    </div>
+      <TrainingTypes />
+      <Schedule />
+      <Coaches />
+      <Gallery />
+      <Membership />
+      <NewsPreview />
+      <ContactSection />
+      <Footer />
+    </>
   );
-}
+};
+
+export default Home;
