@@ -21,6 +21,7 @@ pnpm-debug.log*
 
 bin/
 obj/
+appsettings.Local.json
 
 # user files
 *.user
