@@ -1,6 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../services/api";
 import { useAuth } from "../context/useAuth";
+
+import {
+  CheckCircle,
+  XCircle,
+  Calendar,
+} from "lucide-react";
 
 type Member = {
   memberId: number;
@@ -13,158 +19,228 @@ export default function AdminDashboard() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  const [showUnpaidOnly, setShowUnpaidOnly] = useState(false);
+
   const { logout } = useAuth();
 
-  useEffect(() => {
-    const load = async () => {
-      const res = await api.get("/admin/payment-status");
+  // 🔥 Load data
+  const load = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const res = await api.get(
+        `/admin/payment-status?year=${year}&month=${month}`
+      );
+
       setMembers(res.data);
+    } catch (err) {
+      console.error("Load error:", err);
+    } finally {
       setLoading(false);
-    };
+    }
+  }, [month, year]);
 
+  useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
+  // 🔥 Actions
   const markAsPaid = async (memberId: number) => {
-  try {
-    await api.post("/admin/mark-payment", {
-      memberId,
-    });
-
-    await refresh();
-  } catch (err) {
-    console.error("Payment error:", err);
-    alert("Failed to mark as paid");
-  }
-};
+    try {
+      await api.post("/admin/mark-payment", { memberId });
+      load();
+    } catch (err) {
+      console.error("Payment error:", err);
+    }
+  };
 
   const updateLicense = async (memberId: number) => {
-  const date = prompt("Valid until (YYYY-MM-DD)");
-  if (!date) return;
+    const date = prompt("Valid until (YYYY-MM-DD)");
+    if (!date) return;
 
-  try {
-    await api.put("/admin/license", {
-      memberId,
-      validUntil: new Date(date).toISOString(),
-    });
+    try {
+      await api.put("/admin/license", {
+        memberId,
+        validUntil: new Date(date).toISOString(),
+      });
+      load();
+    } catch (err) {
+      console.error("License error:", err);
+    }
+  };
 
-    alert("License updated ✅");
+  // 🔥 Stats
+  const total = members.length;
+  const paid = members.filter((m) => m.monthPaid).length;
+  const unpaid = total - paid;
+  const percentage = total > 0 ? Math.round((paid / total) * 100) : 0;
 
-    await refresh();
-  } catch (err) {
-    console.error("License error:", err);
-    alert("Failed to update license");
-  }
-};
+  // 🔥 Filter
+  const filteredMembers = showUnpaidOnly
+    ? members.filter((m) => !m.monthPaid)
+    : members;
 
-  const refresh = async () => {
-  try {
-    console.log("Refreshing members...");
-
-    const res = await api.get("/admin/payment-status");
-
-    console.log("DATA:", res.data); // 👈 check in console
-
-    setMembers(res.data);
-  } catch (err) {
-    console.error("Refresh failed:", err);
-  }
-};
-
-  if (loading) return <p className="p-6 text-white">Loading...</p>;
+  if (loading)
+    return <p className="p-6 text-white">Loading...</p>;
 
   return (
     <div className="min-h-screen bg-black text-white p-6">
+      <div className="max-w-6xl mx-auto">
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-
-        <div className="flex gap-4">
-          <button
-            onClick={refresh}
-            className="bg-gray-700 px-4 py-2 rounded"
-            >
-            Refresh
-            </button>
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
 
           <button
             onClick={logout}
-            className="bg-red-500 px-4 py-2 rounded"
+            className="bg-red-500 px-4 py-2 rounded-lg"
           >
             Logout
           </button>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-800 rounded-lg overflow-hidden">
+        {/* Month selector */}
+        <div className="flex items-center gap-4 mb-6">
 
-          <thead className="bg-gray-900 text-sm uppercase tracking-widest">
-            <tr>
-              <th className="p-3 text-left">Member</th>
-              <th className="p-3">Payment</th>
-              <th className="p-3">Box License</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
+          <Calendar className="text-orange-500" />
 
-          <tbody>
-            {members.map((m) => (
-              <tr
-                key={m.memberId}
-                className="border-t border-gray-800 hover:bg-gray-900 transition"
-              >
-                <td className="p-3">{m.name}</td>
-
-                {/* Payment status */}
-                <td className="p-3 text-center">
-                  {m.monthPaid ? (
-                    <span className="bg-green-600 px-3 py-1 rounded-full text-xs">
-                      Paid
-                    </span>
-                  ) : (
-                    <span className="bg-red-600 px-3 py-1 rounded-full text-xs">
-                      Unpaid
-                    </span>
-                  )}
-                </td>
-
-                {/* License */}
-                <td className="p-3 text-center">
-                  {m.boxLicenseValidUntil ? (
-                    new Date(m.boxLicenseValidUntil).toLocaleDateString()
-                  ) : (
-                    <span className="text-gray-500">Not set</span>
-                  )}
-                </td>
-
-                {/* Actions */}
-                <td className="p-3 flex justify-center gap-3">
-
-                  {!m.monthPaid && (
-                    <button
-                      onClick={() => markAsPaid(m.memberId)}
-                      className="bg-green-500 px-3 py-1 rounded text-sm"
-                    >
-                      Mark Paid
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => updateLicense(m.memberId)}
-                    className="bg-orange-500 px-3 py-1 rounded text-sm"
-                  >
-                    Set License
-                  </button>
-
-                </td>
-              </tr>
+          <select
+            value={month}
+            onChange={(e) => setMonth(Number(e.target.value))}
+            className="bg-gray-900 border border-gray-700 p-2 rounded"
+          >
+            {[...Array(12)].map((_, i) => (
+              <option key={i} value={i + 1}>
+                {new Date(0, i).toLocaleString("en", {
+                  month: "long",
+                })}
+              </option>
             ))}
-          </tbody>
+          </select>
 
-        </table>
+          <input
+            type="number"
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            className="bg-gray-900 border border-gray-700 p-2 rounded w-24"
+          />
+        </div>
+
+        {/* 🔥 Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+
+          <div className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl">
+            <p className="text-gray-400 text-xs">Members</p>
+            <p className="text-xl font-semibold">{total}</p>
+          </div>
+
+          <div className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl">
+            <p className="text-gray-400 text-xs">Paid</p>
+            <p className="text-green-400 text-xl font-semibold">{paid}</p>
+          </div>
+
+          <div className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl">
+            <p className="text-gray-400 text-xs">Unpaid</p>
+            <p className="text-red-400 text-xl font-semibold">{unpaid}</p>
+          </div>
+
+          <div className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl">
+            <p className="text-gray-400 text-xs">Completion</p>
+            <p className="text-orange-400 text-xl font-semibold">
+              {percentage}%
+            </p>
+          </div>
+
+        </div>
+
+        {/* 🔥 Filter toggle */}
+        <div className="flex items-center gap-3 mb-4">
+
+          <input
+            type="checkbox"
+            checked={showUnpaidOnly}
+            onChange={() => setShowUnpaidOnly(!showUnpaidOnly)}
+            className="w-4 h-4 accent-orange-500"
+          />
+
+          <span className="text-sm text-gray-300">
+            Show unpaid only
+          </span>
+
+        </div>
+
+        {/* 🔥 Members grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+          {filteredMembers.map((m) => (
+            <div
+              key={m.memberId}
+              className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl hover:shadow-md transition flex flex-col justify-between"
+            >
+
+              {/* Info */}
+              <div>
+                <p className="font-semibold">{m.name}</p>
+
+                <div className="flex items-center gap-2 mt-2 text-sm">
+                  {m.monthPaid ? (
+                    <>
+                      <CheckCircle className="text-green-400 w-4 h-4" />
+                      <span className="text-green-400">Paid</span>
+                    </>
+                  ) : (
+                    <>
+                      <XCircle className="text-red-400 w-4 h-4" />
+                      <span className="text-red-400">Unpaid</span>
+                    </>
+                  )}
+                </div>
+
+                <p className="text-xs text-gray-400 mt-2">
+                  {m.boxLicenseValidUntil
+                    ? `Bokslicentie: ${new Date(
+                        m.boxLicenseValidUntil
+                      ).toLocaleDateString()}`
+                    : "Geen bokslicentie"}
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 mt-4">
+
+                {!m.monthPaid && (
+                  <button
+                    onClick={() => markAsPaid(m.memberId)}
+                    className="flex-1 bg-green-500 text-xs py-4 rounded"
+                  >
+                    Paid
+                  </button>
+                )}
+
+                <button
+                  onClick={() => updateLicense(m.memberId)}
+                  className="flex-1 bg-orange-500 text-xs py-4 rounded"
+                >
+                  Bokslicentie
+                </button>
+
+              </div>
+
+            </div>
+          ))}
+
+        </div>
+
+        {/* Empty state */}
+        {filteredMembers.length === 0 && (
+          <p className="text-gray-400 mt-6 text-sm">
+            No members found
+          </p>
+        )}
+
       </div>
     </div>
   );

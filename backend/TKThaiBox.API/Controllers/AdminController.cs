@@ -12,22 +12,16 @@ public class AdminController : ControllerBase
         _adminService = adminService;
     }
 
-    [HttpGet("payment-status")]
-    public async Task<ActionResult<IEnumerable<AdminPaymentStatusDTO>>> GetPaymentStatus()
-    {
-        var result = await _adminService.GetPaymentStatusAsync();
-        return Ok(result);
-    }
+[HttpGet("payment-status")]
+public async Task<IActionResult> GetPaymentStatus(
+    [FromQuery] int? year,
+    [FromQuery] int? month)
+{
+    var result = await _adminService.GetPaymentStatusAsync(year, month);
+    return Ok(result);
+}
 
-    [Authorize(Roles = "Admin")]
-    [HttpGet("members")]
-    public async Task<IActionResult> GetMembers()
-    {
-        var result = await _adminService.GetAllMembersOverviewAsync();
-        return Ok(result);
-    }
-
-    [Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin")]
 [HttpPost("mark-payment")]
 public async Task<IActionResult> MarkPayment([FromBody] MarkPaymentDTO dto)
 {

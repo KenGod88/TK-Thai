@@ -13,10 +13,24 @@ public class AdminService : IAdminService
         _paymentService = paymentService;
     }
 
-    public async Task<IEnumerable<AdminPaymentStatusDTO>> GetPaymentStatusAsync()
+    public async Task<IEnumerable<AdminPaymentStatusDTO>> GetPaymentStatusAsync(int? year, int? month)
+{
+    var members = await _memberRepository.GetAllMembersAsync();
+
+    var now = DateTime.UtcNow;
+
+    var y = year ?? now.Year;
+    var m = month ?? now.Month;
+
+    return members.Select(member => new AdminPaymentStatusDTO
     {
-        return await _adminRepository.GetPaymentStatusAsync();
-    }
+        MemberId = member.Id,
+        Name = $"{member.FirstName} {member.LastName}",
+        MonthPaid = member.Payments.Any(p =>
+            p.Year == y && p.Month == m),
+        BoxLicenseValidUntil = member.BoxLicenseValidUntil
+    });
+}
 
      public async Task<List<UserDTO>> GetAllUsersAsync()
     {
