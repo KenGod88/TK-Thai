@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/member")]
 public class MemberController : ControllerBase
 {
     private readonly IMemberService _memberService;
@@ -62,18 +64,26 @@ public class MemberController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("{id}/dashboard")]
-    public async Task<ActionResult<MemberDashboardDTO>> GetDashboard(int id)
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyDashboard()
     {
-        var dashboard = await _memberService.GetMemberDashboardAsync(id);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-        if (dashboard == null)
+        if (userIdClaim == null)
+            return Unauthorized();
+
+        var userId = int.Parse(userIdClaim.Value);
+
+        var result = await _memberService.GetMyDashboardAsync(userId);
+
+        if (result == null)
             return NotFound();
 
-        return Ok(dashboard);
+        return Ok(result);
     }
 
-    [HttpGet("/api/admin/payment-status")]
+    [HttpGet("/api/member/payment-status")]
     public async Task<ActionResult<IEnumerable<AdminPaymentStatusDTO>>> GetPaymentStatus()
     {
         var result = await _memberService.GetPaymentStatusAsync();

@@ -67,26 +67,26 @@ public class MemberService : IMemberService
         await _memberRepository.DeleteMemberAsync(id);
     }
 
-    public async Task<MemberDashboardDTO?> GetMemberDashboardAsync(int id)
-    {
-    var member = await _memberRepository.GetMemberByIdAsync(id);
+    public async Task<MemberDashboardDTO?> GetMyDashboardAsync(int userId)
+{
+    var member = await _memberRepository.GetByUserIdAsync(userId);
 
     if (member == null)
         return null;
 
     var now = DateTime.UtcNow;
 
-    var monthPaid = member.Payments.Any(p =>
-        p.Year == now.Year &&
-        p.Month == now.Month);
-
     return new MemberDashboardDTO
     {
         Name = $"{member.FirstName} {member.LastName}",
-        MonthPaid = monthPaid,
-        BoxLicenseValidUntil = member.BoxLicenseValidUntil
+        MonthPaid = member.Payments.Any(p =>
+            p.Year == now.Year &&
+            p.Month == now.Month),
+        BoxLicenseValidUntil = member.BoxLicenseValidUntil,
+        HasValidLicense = member.BoxLicenseValidUntil != null &&
+                          member.BoxLicenseValidUntil > now
     };
-    }
+}
 
     public async Task<IEnumerable<AdminPaymentStatusDTO>> GetPaymentStatusAsync()
 {

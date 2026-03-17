@@ -29,7 +29,7 @@ namespace TKThaiBox.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("BoxLicenseValidUntil")
+                    b.Property<DateTime?>("BoxLicenseValidUntil")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")

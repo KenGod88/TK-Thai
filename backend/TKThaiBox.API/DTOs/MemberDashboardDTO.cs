@@ -4,5 +4,6 @@ public class MemberDashboardDTO
 
     public bool MonthPaid { get; set; }
 
-    public DateTime BoxLicenseValidUntil { get; set; }
+    public DateTime? BoxLicenseValidUntil { get; set; }
+    public bool HasValidLicense { get; set; }
 }
