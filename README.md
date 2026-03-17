@@ -156,10 +156,18 @@ docker compose up --build
 * Dashboard dynamically reflects selected month
 
 ---
+## 🏠 Landing Page
+![Landing Page](docs/images/Landing_page.png)
 
-## 📸 Screenshots (optional)
+## 📊 Admin Dashboard
+![Admin Dashboard](docs/images/Admin_dashboard.png)
 
-*Add screenshots here later*
+
+## 👤 Member Dashboard
+![Member Dashboard](docs/images/member_dashboard.png)
+
+## 🗓 Training Schedule
+![Training Schedule](docs/images/training_schedule.png)
 
 ---
 
