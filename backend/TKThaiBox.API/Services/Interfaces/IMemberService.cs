@@ -5,6 +5,6 @@ public interface IMemberService
     Task AddMemberAsync(CreateMemberDTO dto);
     Task UpdateMemberAsync(int id, CreateMemberDTO dto);
     Task DeleteMemberAsync(int id);
-    Task<MemberDashboardDTO?> GetMemberDashboardAsync(int id);
     Task<IEnumerable<AdminPaymentStatusDTO>> GetPaymentStatusAsync();
+    Task<MemberDashboardDTO?> GetMyDashboardAsync(int userId);
 }

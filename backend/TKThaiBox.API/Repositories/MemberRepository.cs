@@ -11,7 +11,9 @@ public class MemberRepository : IMemberRepository
 
     public async Task<IEnumerable<Member>> GetAllMembersAsync()
     {
-        return await _context.Members.ToListAsync();
+        return await _context.Members
+        .Include(m => m.Payments)
+        .ToListAsync();
     }
 
     public async Task<Member?> GetMemberByIdAsync(int id)
@@ -42,4 +44,11 @@ public class MemberRepository : IMemberRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<Member?> GetByUserIdAsync(int userId)
+{
+    return await _context.Members
+        .Include(m => m.Payments)
+        .FirstOrDefaultAsync(m => m.UserId == userId);
+}
 }
