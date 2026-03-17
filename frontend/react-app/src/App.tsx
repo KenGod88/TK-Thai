@@ -9,11 +9,13 @@ import Club from "./pages/Club";
 import Photos from "./pages/Fotos";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
 
         <Route element={<Layout />}>
@@ -26,10 +28,27 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
 
+          {/* 🔥 ADMIN ROUTE */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute role="Admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
         </Route>
+         <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
       </Routes>
-
     </BrowserRouter>
   );
 }
