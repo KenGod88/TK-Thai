@@ -5,7 +5,7 @@ const Hero: React.FC = () => {
     <section id="home" className="relative h-screen bg-black flex items-center justify-center overflow-hidden text-white pt-24">
 
       {/* spotlight */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_0%,rgba(255,115,0,0.35)_25%,transparent_65%)]" />
+      <div className="absolute inset-0 " />
 
       {/* smoke texture */}
       <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -15,7 +15,7 @@ const Hero: React.FC = () => {
         <img
           src={logo}
           alt="TK Gym"
-          className="mx-auto mb-10 w-[420px] max-w-[85%] drop-shadow-[0_0_30px_rgba(255,80,0,0.5)]"
+          className="mx-auto mb-10 w-[420px] max-w-[85%] bg-white p-4 rounded-md shadow-lg"
         />
 
         <h1 className="text-xl md:text-2xl tracking-[0.35em] font-semibold mb-6">

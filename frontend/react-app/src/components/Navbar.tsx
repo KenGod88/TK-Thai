@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-5">
 
         {/* Logo */}
-        <img src={logo} alt="TK Gym" className="h-10" />
+        <img src={logo} alt="TK Gym" className="h-12 bg-white p-1 rounded-md" />
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-12 text-sm uppercase tracking-widest text-white">
