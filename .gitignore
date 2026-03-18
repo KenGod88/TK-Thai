@@ -9,6 +9,7 @@ build/
 
 .env
 *.local
+nginx.conf
 
 npm-debug.log*
 yarn-debug.log*
