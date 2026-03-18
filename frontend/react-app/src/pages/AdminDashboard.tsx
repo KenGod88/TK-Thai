@@ -38,6 +38,8 @@ export default function AdminDashboard() {
   }
 };
 
+
+
   const updateLicense = async (memberId: number) => {
   const date = prompt("Valid until (YYYY-MM-DD)");
   if (!date) return;
@@ -57,6 +59,8 @@ export default function AdminDashboard() {
   }
 };
 
+
+
   const refresh = async () => {
   try {
     console.log("Refreshing members...");
@@ -70,6 +74,22 @@ export default function AdminDashboard() {
     console.error("Refresh failed:", err);
   }
 };
+
+const makeMember = async () => {
+  const Firstname = prompt("Member name:");
+  const Lastname = prompt("Member surname:");
+  const email = prompt("Member email:");
+
+
+  try {
+    await api.post("/admin/make-member", { Firstname, Lastname, email });
+    await refresh();
+  } catch (err) {
+    console.error("Failed to make member:", err);
+    alert("Failed to make member");
+  }
+};
+
 
   if (loading) return <p className="p-6 text-white">Loading...</p>;
 
@@ -87,6 +107,13 @@ export default function AdminDashboard() {
             >
             Refresh
             </button>
+
+          <button
+            onClick={makeMember}
+            className="bg-orange-500 px-4 py-2 rounded"
+          >
+            Make Member
+          </button>
 
           <button
             onClick={logout}
